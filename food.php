@@ -110,6 +110,34 @@ foreach($data as $key=>$value) {
 }
 print("</table>\n");
 
+
+
+$result = mysql_query($all_average_rating);
+
+if(!$result) { print mysql_error(); }
+
+$data = array();
+while(list($name, $rating) = mysql_fetch_row($result)) {
+  $data[$name] = $rating;
+}
+
+$count = 0;
+foreach($history as $key=>$value) {
+  $count++;
+  $data[$key] = $data[$key]/($count+5);
+}
+arsort($data);
+
+print("<br>
+<b><u>Suggestions (score = average rating / (t+5)):</u></b><br>
+<table border=1>
+  <tr><td><b>Restaurant Name</b></td><td><b>Score</b></td></tr>\n");
+foreach($data as $key=>$value) {
+    print("  <tr><td>$key</td><td>$value</tr>\n");
+}
+print("</table>\n");
+
+
 mysql_close();
 ?>
 </body>
