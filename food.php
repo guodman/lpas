@@ -77,6 +77,7 @@ foreach($history as $key=>$value) {
 
 print("</table>\n");
 
+print("<table><tr><td>");
 
 $count = 0;
 foreach($history as $key=>$value) {
@@ -94,6 +95,8 @@ foreach($data as $key=>$value) {
 }
 print("</table>\n");
 
+print("</td><td>");
+
 $count = 0;
 foreach($history as $key=>$value) {
   $count++;
@@ -110,7 +113,7 @@ foreach($data as $key=>$value) {
 }
 print("</table>\n");
 
-
+print("</td><td>");
 
 $result = mysql_query($all_average_rating);
 
@@ -128,6 +131,8 @@ foreach($history as $key=>$value) {
 }
 arsort($data);
 
+print("</td><td>");
+
 print("<br>
 <b><u>Suggestions (score = average rating / (t+5)):</u></b><br>
 <table border=1>
@@ -137,6 +142,7 @@ foreach($data as $key=>$value) {
 }
 print("</table>\n");
 
+print("</td></tr></table>");
 
 mysql_close();
 ?>
