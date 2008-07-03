@@ -48,9 +48,7 @@ for ($count = 0; $count < mysql_numrows($all_usernames_result); $count++) {
 }
 
 // check if users are specified.  If they are, just use them. Otherwise, use all users.
-if (empty($_GET)) {
-   $names = $all_names;
-} elseif (array_key_exists("users", $_GET)) {
+if (array_key_exists("users", $_GET)) {
    $names = split(",", $_GET["users"]);
 } else {
    // assume that the checkboxes were used.
@@ -62,6 +60,11 @@ if (empty($_GET)) {
       }
    }
 }
+// make sure that the list of users is not empty.
+if (empty($names)) {
+   $names = $all_names;
+}
+
 $condition = "(a.User='" . join("' OR a.User='",$names) . "')";
 
 //print_r($names);
