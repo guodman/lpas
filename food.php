@@ -25,17 +25,47 @@ FOOD!!
 </title>
 
 <body>
+<div align=center style="font-size:25">
+Ratings |
+<a href="preferences.php">Preferences</a> |
+<del>History</del>
+</div>
 <?php
 
-$names = array();
-$condition = "";
-if (array_key_exists("users", $_GET)) {
-   $names = split(",", $_GET["users"]);
-   $condition = "(a.User='" . join("' OR a.User='",$names) . "')";
-}
+@mysql_connect("localhost", "doug") or die("Could not connect to the database");
+@mysql_select_db("restaurants") or die("Could not select database");
 
 $all_usernames = "SELECT DISTINCT User
 FROM attendees";
+
+$names = array();
+$condition = "";
+
+//Assemble a list of all names in the system.
+$all_usernames_result = mysql_query($all_usernames);
+for ($count = 0; $count < mysql_numrows($all_usernames_result); $count++) {
+   $all_names[$count] = mysql_result($all_usernames_result, $count);
+}
+
+// check if users are specified.  If they are, just use them. Otherwise, use all users.
+if (empty($_GET)) {
+   $names = $all_names;
+} elseif (array_key_exists("users", $_GET)) {
+   $names = split(",", $_GET["users"]);
+} else {
+   // assume that the checkboxes were used.
+   $count = 0;
+   foreach($_GET as $n => $on) {
+      if (in_array($n, $all_names)) {
+         $names[$count] = $n;
+         $count++;
+      }
+   }
+}
+$condition = "(a.User='" . join("' OR a.User='",$names) . "')";
+
+//print_r($names);
+
 
 $all_ratings = "SELECT Name, User, Rating
 FROM attendees a, restaurants r
@@ -55,14 +85,20 @@ WHERE h.RestaurantID = r.ID
 GROUP BY RestaurantID
 ORDER BY Last_Visit";
 
-@mysql_connect("localhost", "doug") or die("Could not connect to the database");
-@mysql_select_db("restaurants") or die("Could not select database");
-
 print("<b><u>Registered Users:</u></b><br>");
+print("<form action=food.php>");
 $all_usernames_result = mysql_query($all_usernames);
 for ($count = 0; $count < mysql_numrows($all_usernames_result); $count++) {
-			  print(mysql_result($all_usernames_result, $count)."<br>\n");
+//			  print(mysql_result($all_usernames_result, $count)."<br>\n");
+   $curname = mysql_result($all_usernames_result, $count);
+   if (in_array($curname, $names)) {
+      print("<input type=checkbox name=$curname checked \> " . $curname . "<br>");
+   } else {
+      print("<input type=checkbox name=$curname \> " . $curname . "<br>");
+   }
 }
+print("<input type=submit value=submit \>");
+print("</form>");
 
 print("<br>
 <b><u>Rated Restaurants:</u></b><br>
