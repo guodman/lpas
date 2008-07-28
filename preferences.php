@@ -1,4 +1,4 @@
-<!--
+<?php
 /**
  * Copyright (C) 2007 Doug Reeves dreeves@bluebottle.com
  * All rights reserved.
@@ -18,11 +18,11 @@
  *
  * see http://www.gnu.org/licenses/gpl.html for more information
  */
--->
-<?php
+
+require("functions.inc.php");
+
 session_start();
-mysql_connect("localhost", "doug");
-mysql_select_db("restaurants");
+$db = new DB();
 
 if(!$_SESSION["user"]) {
 	$_SESSION["user"] = mysql_real_escape_string($_GET["user"]);
@@ -52,7 +52,7 @@ function doMain() {
 	$result .= "<p>Please enter a rating for the following restaurants on a scale from 1 to 100</p>";
 	
 	$sql = "SELECT r.ID, r.Name, a.Rating FROM restaurants r LEFT JOIN attendees a ON r.ID = a.RestaurantID AND a.User = '" . $_SESSION["user"] . "' ORDER BY r.Name";
-	$results = mysql_query($sql);
+	$results = $db->query($sql);
 	
 	if(!$results) {
 		echo mysql_error();
@@ -73,14 +73,14 @@ function doMain() {
 	
 function handleSave() {
 	$sql = "DELETE FROM attendees WHERE User = '" . $_SESSION["user"] . "';";
-	mysql_query($sql);
+	$db->query($sql);
 	
 	foreach($_POST["rating"] as $key=>$value) {
 		$inserts[] = "(" . mysql_real_escape_string($key) . ", '" . $_SESSION["user"] . "', " . mysql_real_escape_string($value) . ")";
 	}
 	
 	$sql = "INSERT INTO attendees (RestaurantID, User, Rating) VALUES " . join(",", $inserts) . ";";
-	$result = mysql_query($sql);
+	$result = $db->query($sql);
 	
 	if(!$result) {
 		$response = "Error updating preferences." ;

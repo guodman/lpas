@@ -1,4 +1,4 @@
-<!--
+<?php
 /**
  * Copyright (C) 2007 Doug Reeves dreeves@bluebottle.com
  * All rights reserved.
@@ -18,7 +18,9 @@
  *
  * see http://www.gnu.org/licenses/gpl.html for more information
  */
--->
+
+ require("functions.inc.php");
+ ?>
 <html>
 <title>
 FOOD!!
@@ -32,8 +34,7 @@ Ratings |
 </div>
 <?php
 
-@mysql_connect("localhost", "doug") or die("Could not connect to the database");
-@mysql_select_db("restaurants") or die("Could not select database");
+$db = new DB();
 
 $all_usernames = "SELECT DISTINCT User
 FROM attendees";
@@ -42,7 +43,7 @@ $names = array();
 $condition = "";
 
 //Assemble a list of all names in the system.
-$all_usernames_result = mysql_query($all_usernames);
+$all_usernames_result = $db->query($all_usernames);
 for ($count = 0; $count < mysql_numrows($all_usernames_result); $count++) {
    $all_names[$count] = mysql_result($all_usernames_result, $count);
 }
@@ -90,7 +91,7 @@ ORDER BY Last_Visit";
 
 print("<b><u>Registered Users:</u></b><br>");
 print("<form action=food.php>");
-$all_usernames_result = mysql_query($all_usernames);
+$all_usernames_result = $db->query($all_usernames);
 for ($count = 0; $count < mysql_numrows($all_usernames_result); $count++) {
 //			  print(mysql_result($all_usernames_result, $count)."<br>\n");
    $curname = mysql_result($all_usernames_result, $count);
@@ -107,7 +108,7 @@ print("<br>
 <b><u>Rated Restaurants:</u></b><br>
 <table border=1>
   <tr><td><b>Restaurant Name</b></td><td><b>Average Rating</b></td></tr>\n");
-$result = mysql_query($all_average_rating);
+$result = $db->query($all_average_rating);
 
 if(!$result) { print mysql_error(); }
 
@@ -126,7 +127,7 @@ print("</table>\n");
 print("<br>
 <b><u>Recent Visits:</u></b><br><TABLE BORDER=1>
   <tr><td><b>Restaurant Name</b></td><td><b>Date of Last Visit</b></td></tr>\n");
-$recent_result = mysql_query($most_recent_visit);
+$recent_result = $db->query($most_recent_visit);
 $history = array();
 while(list($name, $date) = mysql_fetch_row($recent_result)) {
 		  $history[$name] = $date;
@@ -175,7 +176,7 @@ print("</table>\n");
 
 print("</td><td>");
 
-$result = mysql_query($all_average_rating);
+$result = $db->query($all_average_rating);
 
 if(!$result) { print mysql_error(); }
 
