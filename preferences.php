@@ -22,7 +22,7 @@
 require("functions.inc.php");
 
 session_start();
-$db = new DB();
+
 
 if(!$_SESSION["user"]) {
 	$_SESSION["user"] = mysql_real_escape_string($_GET["user"]);
@@ -37,15 +37,13 @@ if(!$_SESSION["user"]) {
 	$body = doMain();
 }
 
-?><html>
-<head><title>Preference Editor</title></head>
-<body><h1>Preference Editor</h1>
-<?php echo $body; ?>
-</body></html>
+print showHeader("Preferences");
+ echo $body;
+print showFooter();
 
-<?php
 
 function doMain() {
+	$db = new DB();
 	if($_GET["msg"]) {
 		$result = "<p>" . $_GET["msg"] . "</p>";
 	}
@@ -58,20 +56,21 @@ function doMain() {
 		echo mysql_error();
 	}
 	
-	$result .= "<form method=\"post\">";
+	$result .= "<form method=\"post\" class=\"oneColumn\">";
 	while(list($id, $name, $rating) = mysql_fetch_row($results)) {
 		if(!$rating) {
 			$rating = "50";
 		}
 			
-		$result .= "<div><strong>$name</strong><input type=\"text\" name=\"rating[$id]\" value=\"$rating\"/></div>";
+		$result .= "<div class=\"" . ($q++ % 2 == 0 ? "even" : "odd") . "\"><strong>$name</strong><input type=\"text\" name=\"rating[$id]\" value=\"$rating\"/></div>\n";
 	}
-	$result .= "<button type=\"submit\" name=\"action\" value=\"save\">Save Preferences</button></form>";
+	$result .= "<button type=\"submit\" name=\"action\" value=\"save\">Save Preferences</button></form>\n";
 	
 	return $result;
 }
 	
 function handleSave() {
+	$db = new DB();
 	$sql = "DELETE FROM attendees WHERE User = '" . $_SESSION["user"] . "';";
 	$db->query($sql);
 	

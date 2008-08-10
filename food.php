@@ -20,19 +20,8 @@
  */
 
  require("functions.inc.php");
- ?>
-<html>
-<title>
-FOOD!!
-</title>
 
-<body>
-<div align=center style="font-size:25">
-Ratings |
-<a href="preferences.php">Preferences</a> |
-<del>History</del>
-</div>
-<?php
+print showHeader("Ratings");
 
 $db = new DB();
 
@@ -90,15 +79,15 @@ GROUP BY RestaurantID
 ORDER BY Last_Visit";
 
 print("<b><u>Registered Users:</u></b><br>");
-print("<form action=food.php>");
+print("<form class=\"manyColumns\">");
 $all_usernames_result = $db->query($all_usernames);
 for ($count = 0; $count < mysql_numrows($all_usernames_result); $count++) {
 //			  print(mysql_result($all_usernames_result, $count)."<br>\n");
    $curname = mysql_result($all_usernames_result, $count);
    if (in_array($curname, $names)) {
-      print("<input type=checkbox name=$curname checked \> " . $curname . "<br>");
+      print "<div><input type=\"checkbox\" name=\"$curname\" checked=\"checked\" /> " . $curname . "</div>\n";
    } else {
-      print("<input type=checkbox name=$curname \> " . $curname . "<br>");
+      print "<div><input type=\"checkbox\" name=\"$curname\" /> " . $curname . "</div>\n";
    }
 }
 print("<input type=submit value=submit \>");
@@ -118,6 +107,7 @@ while(list($name, $rating) = mysql_fetch_row($result)) {
 }
 
 foreach($data as $key=>$value) {
+    $value = round($value,1);
     print("  <tr><td>$key</td><td>$value</tr>\n");
 }
 
@@ -143,7 +133,7 @@ print("<table><tr><td>");
 $count = 0;
 foreach($history as $key=>$value) {
   $count++;
-  $data[$key] = $data[$key]/$count;
+  $data[$key] = round($data[$key]/$count,1);
 }
 arsort($data);
 
@@ -152,7 +142,7 @@ print("<br>
 <table border=1>
   <tr><td><b>Restaurant Name</b></td><td><b>Score</b></td></tr>\n");
 foreach($data as $key=>$value) {
-    print("  <tr><td>$key</td><td>$value</tr>\n");
+    print "  <tr class=\"" . ($q++ % 2 == 0 ? "even" : "odd") . "\"><td>$key</td><td>$value</tr>\n";
 }
 print("</table>\n");
 
@@ -161,7 +151,7 @@ print("</td><td>");
 $count = 0;
 foreach($history as $key=>$value) {
   $count++;
-  $data[$key] = $data[$key]/$count;
+  $data[$key] = round($data[$key]/$count,1);
 }
 arsort($data);
 
@@ -170,7 +160,7 @@ print("<br>
 <table border=1>
   <tr><td><b>Restaurant Name</b></td><td><b>Score</b></td></tr>\n");
 foreach($data as $key=>$value) {
-    print("  <tr><td>$key</td><td>$value</tr>\n");
+    print "  <tr class=\"" . ($q++ % 2 == 0 ? "even" : "odd") . "\"><td>$key</td><td>$value</tr>\n";
 }
 print("</table>\n");
 
@@ -188,7 +178,7 @@ while(list($name, $rating) = mysql_fetch_row($result)) {
 $count = 0;
 foreach($history as $key=>$value) {
   $count++;
-  $data[$key] = $data[$key]/($count+5);
+  $data[$key] = round($data[$key]/($count+5),1);
 }
 arsort($data);
 
@@ -199,13 +189,11 @@ print("<br>
 <table border=1>
   <tr><td><b>Restaurant Name</b></td><td><b>Score</b></td></tr>\n");
 foreach($data as $key=>$value) {
-    print("  <tr><td>$key</td><td>$value</tr>\n");
+    print("  <tr class=\"" . ($q++ % 2 == 0 ? "even" : "odd") . "\"><td>$key</td><td>$value</tr>\n");
 }
 print("</table>\n");
 
 print("</td></tr></table>");
 
-mysql_close();
-?>
-</body>
-</html>
+
+print showFooter();

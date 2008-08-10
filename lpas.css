@@ -1,0 +1,9 @@
+* 						{margin:0px;padding:0px;}
+table td				{border: 0px;margin-right:10px;}
+table					{border: 0px;}
+.even					{background-color:#CCC;}
+#main					{width:940px;margin:0px auto;padding:10px;}
+.oneColumn div 			{position:relative;}
+.oneColumn div input		{position:absolute;left:400px;}
+.manyColumns			{width:400px;}
+.manyColumns div			{float:left;width:100px;}
