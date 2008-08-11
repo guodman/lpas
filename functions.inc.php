@@ -32,7 +32,7 @@ class DB {
 	function DB() {
 		if(!$conn) {
 			$this->conn = @mysql_connect($GLOBALS["dbHost"], $GLOBALS["dbUser"], $GLOBALS["dbPass"]) or die("Could not connect to the database (" . mysql_error() . ")");
-			@mysql_select_db("restaurant",$this->conn) or die("Could not select database");
+			@mysql_select_db($GLOBALS["dbDatabase"],$this->conn) or die("Could not select database");
 			// print "DB Connected";
 		}
 	}
