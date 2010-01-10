@@ -23,6 +23,7 @@
 
 
 require("functions.inc.php");
+requireUser();
 $db = new DB();
 
 $action = $_GET["action"];

@@ -77,25 +77,24 @@ WHERE h.RestaurantID = r.ID
 GROUP BY RestaurantID
 ORDER BY Last_Visit";
 
-print("<strong><u>Registered Users:</u></strong><br>");
+print("<h2>Registered Users:</h2>");
 print("<form class=\"manyColumns\">");
 $all_usernames_result = $db->query($all_usernames);
 for ($count = 0; $count < mysql_numrows($all_usernames_result); $count++) {
 //			  print(mysql_result($all_usernames_result, $count)."<br>\n");
    $curname = mysql_result($all_usernames_result, $count);
    if (in_array($curname, $names)) {
-      print "<div><input type=\"checkbox\" name=\"$curname\" checked=\"checked\" /> " . $curname . "</div>\n";
+      print "<div><label class=\"inline\"><input type=\"checkbox\" name=\"$curname\" checked=\"checked\" /> " . $curname . "</label></div>\n";
    } else {
-      print "<div><input type=\"checkbox\" name=\"$curname\" /> " . $curname . "</div>\n";
+      print "<div><label class=\"inline\"><input type=\"checkbox\" name=\"$curname\" /> " . $curname . "</div></label>\n";
    }
 }
 print("<input type=submit value=submit \>");
 print("</form>");
 
-print("<br>
-<strong><u>Rated Restaurants:</u></strong><br>
-<table border=1>
-  <tr><td><strong>Restaurant Name</strong></td><td><strong>Average Rating</strong></td></tr>\n");
+print("<h2>Rated Restaurants:</h2>
+<table><thead>
+  <tr><td><strong>Restaurant Name</strong></td><td><strong>Average Rating</strong></td></tr></thead><tbody>\n");
 $result = $db->query($all_average_rating);
 
 if(!$result) { print mysql_error(); }
@@ -110,12 +109,13 @@ foreach($data as $key=>$value) {
     print("  <tr><td>$key</td><td>$value</tr>\n");
 }
 
-print("</table>\n");
+print("</tbody></table>\n");
 
 
 print("<br>
-<strong><u>Recent Visits:</u></strong><br><TABLE BORDER=1>
-  <tr><td><strong>Restaurant Name</strong></td><td><strong>Date of Last Visit</strong></td></tr>\n");
+<h2>Recent Visits:</h2>
+<table>
+  <thead><tr><td><strong>Restaurant Name</strong></td><td><strong>Date of Last Visit</strong></td></tr></thead><tbody>\n");
 $recent_result = $db->query($most_recent_visit);
 $history = array();
 while(list($name, $date) = mysql_fetch_row($recent_result)) {
@@ -125,75 +125,81 @@ foreach($history as $key=>$value) {
     print("  <tr><td>$key</td><td>$value</tr>\n");
 }
 
-print("</table>\n");
+print("</tbody></table>\n");
 
-print("<table><tr><td>");
+print '<div class="suggestions">';
+// Suggestion 1
+print '<div class="suggestion">';
+	$count = 0;
+	foreach($history as $key=>$value) {
+		$count++;
+		$data[$key] = round($data[$key]/$count,1);
+	}
+	arsort($data);
 
-$count = 0;
-foreach($history as $key=>$value) {
-  $count++;
-  $data[$key] = round($data[$key]/$count,1);
-}
-arsort($data);
+	print "<h2>Suggestions #1<br/>(score = average rating / t):</h2>
+	<table><thead>
+	<tr><td>Restaurant Name</td><td><strong>Score</strong></td></tr></thead><tbody>\n";
+	foreach($data as $key=>$value) {
+		print "  <tr class=\"" . ($q++ % 2 == 0 ? "even" : "odd") . "\"><td>$key</td><td>$value</tr>\n";
+	}
+	print "</tbody></table>\n";
 
-print("<br>
-<strong><u>Suggestions (score = average rating / t):</u></strong><br>
-<table border=1>
-  <tr><td><strong>Restaurant Name</strong></td><td><strong>Score</strong></td></tr>\n");
-foreach($data as $key=>$value) {
-    print "  <tr class=\"" . ($q++ % 2 == 0 ? "even" : "odd") . "\"><td>$key</td><td>$value</tr>\n";
-}
-print("</table>\n");
 
-print("</td><td>");
 
-$count = 0;
-foreach($history as $key=>$value) {
-  $count++;
-  $data[$key] = round($data[$key]/$count,1);
-}
-arsort($data);
+	
+print '</div>';
 
-print("<br>
-<strong><u>Suggestions (score = average rating / t^2):</u></strong><br>
-<table border=1>
-  <tr><td><strong>Restaurant Name</strong></td><td><strong>Score</strong></td></tr>\n");
-foreach($data as $key=>$value) {
-    print "  <tr class=\"" . ($q++ % 2 == 0 ? "even" : "odd") . "\"><td>$key</td><td>$value</tr>\n";
-}
-print("</table>\n");
 
-print("</td><td>");
+// Suggestion 2
+print '<div class="suggestion">';
+	$count = 0;
+	foreach($history as $key=>$value) {
+		$count++;
+		$data[$key] = round($data[$key]/$count,1);
+	}
+	arsort($data);
+	print "<h2>Suggestions #2<br/>(score = average rating / t^2):</h2>
+	<table><thead>
+	<tr><td>Restaurant Name</td><td>Score</td></tr></thead><tbody>\n" ;
+	foreach($data as $key=>$value) {
+	print "  <tr class=\"" . ($q++ % 2 == 0 ? "even" : "odd") . "\"><td>$key</td><td>$value</tr>\n";
+	}
+	print("</tbody></table>\n");
+print '</div>';
 
-$result = $db->query($all_average_rating);
 
-if(!$result) { print mysql_error(); }
 
-$data = array();
-while(list($name, $rating) = mysql_fetch_row($result)) {
-  $data[$name] = $rating;
-}
 
-$count = 0;
-foreach($history as $key=>$value) {
-  $count++;
-  $data[$key] = round($data[$key]/($count+5),1);
-}
-arsort($data);
 
-print("</td><td>");
+// Suggestion 3
+print '<div class="suggestion">';
+	$result = $db->query($all_average_rating);
 
-print("<br>
-<strong><u>Suggestions (score = average rating / (t+5)):</u></strong><br>
-<table border=1>
-  <tr><td><>Restaurant Name</strong></td><td><strong>Score</strong></td></tr>\n");
-  
-foreach($data as $key=>$value) {
-    print("  <tr class=\"" . ($q++ % 2 == 0 ? "even" : "odd") . "\"><td>$key</td><td>$value</tr>\n");
-}
-print "</table>\n";
+	if(!$result) { print mysql_error(); }
 
-print "</td></tr></table>";
+	$data = array();
+	while(list($name, $rating) = mysql_fetch_row($result)) {
+	$data[$name] = $rating;
+	}
+
+	$count = 0;
+	foreach($history as $key=>$value) {
+	$count++;
+	$data[$key] = round($data[$key]/($count+5),1);
+	}
+	arsort($data);
+
+	print "<h2>Suggestions #3<br/> (score = average rating / (t+5)):</h2>
+	<table>
+	<thead><tr><td><strong>Restaurant Name</strong></td><td><strong>Score</strong></td></tr></thead><tbody>\n";
+	
+	foreach($data as $key=>$value) {
+	print("  <tr class=\"" . ($q++ % 2 == 0 ? "even" : "odd") . "\"><td>$key</td><td>$value</tr>\n");
+	}
+	print "</tbody></table>\n";
+print '</div>';
+print '</div>';
 
 
 print showFooter();

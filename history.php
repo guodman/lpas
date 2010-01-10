@@ -65,14 +65,14 @@ function main() {
 	if($db->size() == 0) {
 		return "<span class=\"error\">No history found.</span>";
 	}
-	$body .= "<table><tr><th>Restaurant Name</th><th>Date of Visit</th><th>Duration</th></tr>";
+	$body .= "<h2 style='margin-top:20px;'>Past Visits</h2><table><thead><tr><td>Restaurant Name</td><td>Date of Visit</td><td>Duration</td></tr></thead><tbody>";
 	while(list($rid,$rName,$date,$duration) = $db->fetchrow()) {
 		$body .= "<tr class=\"" . ($q++ % 2 == 0 ? "even" : "odd") . "\" id=\"hist$rid\"><td>$rName</td><td>$date</td><td>$duration minutes</td><td><a href=\"?action=delete&id=$rid&date=$date\"><img src=\"delete.png\" alt=\"Delete this entry\" style=\"width:50%\" /></a></td></tr>";
 		// Undesireable slide animation:
 		//onclick=\"$('#hist$rid').hide('slide',{direction:'up'},'slow');\"
 	}
 	
-	$body .= "</table>";
+	$body .= "</tbody></table>";
 	return $body;
 	
 }

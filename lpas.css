@@ -1,10 +1,16 @@
 * 						{margin:0px;padding:0px;}
-table td				{border: 0px;margin-right:10px;}
-table					{border: 0px;}
+table					{border: 0px;border: 1px solid black;}
+table td					{border: 0px;margin-right:10px;padding:3px;}
+thead td					{font-weight:bold;border-bottom:2px solid black;text-align:center;}
+tbody tr:nth-child(odd)		{background: #DDD}
+tbody tr:nth-child(even)		{background: #FFF;}
 label					{position:relative;display:block;}
 label input,
 label select				{position:absolute;left:300px;}
+label.inline input			{position:relative;left:0px;}
+fieldset legend			{margin-left:20px;}
 .even					{background-color:#CCC;}
+h2						{font-size:1.1em;}
 a img					{border: 0;}
 p					{margin-bottom:20px;}
 #main					{width:940px;margin:0px auto;padding:10px;}
@@ -12,5 +18,7 @@ p					{margin-bottom:20px;}
 .oneColumn div input		{position:absolute;left:400px;}
 .manyColumns			{width:400px;}
 .manyColumns div			{float:left;width:100px;}
+.suggestions			{overflow:hidden;margin-top:20px;}
+.suggestion			{float:left;margin-right:5px;}
 .error				{color:red;font-size:1.2em;}
 #footer				{text-align: center;font-size:.9em;margin-top:40px;}
