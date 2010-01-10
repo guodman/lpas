@@ -1,9 +1,16 @@
 * 						{margin:0px;padding:0px;}
 table td				{border: 0px;margin-right:10px;}
 table					{border: 0px;}
+label					{position:relative;display:block;}
+label input,
+label select				{position:absolute;left:300px;}
 .even					{background-color:#CCC;}
+a img					{border: 0;}
+p					{margin-bottom:20px;}
 #main					{width:940px;margin:0px auto;padding:10px;}
 .oneColumn div 			{position:relative;}
 .oneColumn div input		{position:absolute;left:400px;}
 .manyColumns			{width:400px;}
 .manyColumns div			{float:left;width:100px;}
+.error				{color:red;font-size:1.2em;}
+#footer				{text-align: center;font-size:.9em;margin-top:40px;}

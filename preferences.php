@@ -21,25 +21,19 @@
 
 require("functions.inc.php");
 
-session_start();
+
+$db = new DB();
+requireUser();
 
 
-if(!$_SESSION["user"]) {
-	$_SESSION["user"] = mysql_real_escape_string($_GET["user"]);
-	
-}
 
-if(!$_SESSION["user"]) {
-	$body = promptForUser();
-} else if($_POST["action"] == "save") {
+if($_POST["action"] == "save") {
 	$body = handleSave();
 } else {
 	$body = doMain();
 }
 
-print showHeader("Preferences");
- echo $body;
-print showFooter();
+display("Preferences", $body);
 
 
 function doMain() {
@@ -93,11 +87,5 @@ function handleSave() {
 	forward($SERVER["PHP_SELF"] . "?msg=$response");
 }
 
-function promptForUser() {
-	$result = "<form method=\"get\">Who are you? <input type=\"text\" name=\"user\"/><input type=\"submit\"></form>";
-	return $result;
-}
 
-function forward($url) {
-	header("Location: $url\n\n");
-}
+

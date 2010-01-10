@@ -1,6 +1,6 @@
 <?php
 
-$GLOBALS["dbUser"] = "doug";
-$GLOBALS["dbPass"] = "";
+$GLOBALS["dbUser"] = "lpas";
+$GLOBALS["dbPass"] = "frg8*";
 $GLOBALS["dbHost"] = "localhost";
-$GLOBALS["dbDatabase"] = "restaurants";
+$GLOBALS["dbDatabase"] = "lpas";
