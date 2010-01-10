@@ -7,7 +7,7 @@ require("functions.inc.php");
 $db = new DB();
 
 $action = $_GET["action"];
-$id = $db->escape($_GET["action"]);
+$id = $db->escape($_GET["id"]);
 $name = $db->escape($_GET["name"]);
 
 if($action == "delete" && $id) {
