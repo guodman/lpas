@@ -19,14 +19,13 @@
  * see http://www.gnu.org/licenses/gpl.html for more information
  */
 
- require("functions.inc.php");
+require("functions.inc.php");
 
 print showHeader("Ratings");
 
 $db = new DB();
 
-$all_usernames = "SELECT DISTINCT User
-FROM attendees";
+$all_usernames = "SELECT DISTINCT User FROM attendees";
 
 $names = array();
 $condition = "";
@@ -191,9 +190,9 @@ print("<br>
 foreach($data as $key=>$value) {
     print("  <tr class=\"" . ($q++ % 2 == 0 ? "even" : "odd") . "\"><td>$key</td><td>$value</tr>\n");
 }
-print("</table>\n");
+print "</table>\n";
 
-print("</td></tr></table>");
+print "</td></tr></table>";
 
 
 print showFooter();
