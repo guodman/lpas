@@ -32,8 +32,3 @@ print showHeader("Ratings");
 print $body;
 
 
-
-function forward($url) {
-	header("Location: $url\n\n");
-	exit;
-}
