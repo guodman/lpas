@@ -1,6 +1,6 @@
 -- MySQL dump 10.11
 --
--- Host: localhost    Database: restaurants
+-- Host: localhost    Database: lpas
 -- ------------------------------------------------------
 -- Server version	5.0.45-Debian_1ubuntu3.3-log
 
@@ -16,12 +16,12 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Current Database: `restaurants`
+-- Current Database: `lpas`
 --
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `restaurants` /*!40100 DEFAULT CHARACTER SET latin1 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `lpas` /*!40100 DEFAULT CHARACTER SET latin1 */;
 
-USE `restaurants`;
+USE `lpas`;
 
 --
 -- Table structure for table `attendees`
