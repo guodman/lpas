@@ -1,4 +1,27 @@
 <?php
+/**
+* Functions.inc.php
+* Provides useful display abstraction, as well as database objects and connectivity.
+*
+* Copyright (C) 2010 Stephen Fluin stephen.fluin@gmail.com
+* All rights reserved.
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, version 2 of the License only.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+*
+* see http://www.gnu.org/licenses/gpl.html for more information
+*/
+ 
 require("settings.inc.php");
 session_start();
 
@@ -23,7 +46,8 @@ function showHeader($title) {
 	<div align=center style="font-size:25">
 	<a href="food.php">Ratings</a> |
 	<a href="preferences.php">Preferences</a> |
-	<a href="history.php">History</a>
+	<a href="history.php">History</a> |
+	<a href="restaurants.php">Restaurants</a>
 	</div>';
 	print '<body><div id="main"><h1>' . $title . '</h1>';
 }
