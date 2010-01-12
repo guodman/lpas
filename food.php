@@ -35,18 +35,20 @@ $all_usernames_result = $db->query($all_usernames);
 for ($count = 0; $count < mysql_numrows($all_usernames_result); $count++) {
    $all_names[$count] = mysql_result($all_usernames_result, $count);
 }
-
 // check if users are specified.  If they are, just use them. Otherwise, use all users.
+// What does the nominal case here even do?  We have no get variable "users"
 if (array_key_exists("users", $_GET)) {
    $names = split(",", $_GET["users"]);
 } else {
    // assume that the checkboxes were used.
    $count = 0;
    foreach($_GET as $n => $on) {
+	$n = strtr($n,"_"," ");
       if (in_array($n, $all_names)) {
          $names[$count] = $n;
          $count++;
       }
+	//else { print "$n wasn't in all names."; }
    }
 }
 // make sure that the list of users is not empty.
