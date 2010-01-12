@@ -44,7 +44,7 @@ if($action == "delete" && $id) {
 $db->query("SELECT ID,Name from restaurants ORDER BY Name DESC");
 $body .= "<table><thead><tr><td>Name</td><td>Delete</td></tr></thead><tbody>";
 while(list($id,$rName) = $db->fetchrow()) {
-	$body .= "<tr><td>$rName</td><td><a href=\"?action=delete&id=$id\"><img src=\"delete.png\" alt=\"delete\"/></a></td></tr>";
+	$body .= "<tr><td>$rName</td><td><a href=\"?action=delete&id=$id\" onclick=\"return confirm('Deleting this restaurant will destroy all history and preference data stored with it. Are you sure?!')\"><img src=\"delete.png\" alt=\"delete\"/></a></td></tr>";
 }
 $body .= "</tbody></table>";
 
