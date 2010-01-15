@@ -67,7 +67,7 @@ WHERE a.RestaurantID = r.ID $condition";
 
 //print("Ratings Statement: $all_ratings<br>\n\n");
 
-$all_average_rating = "SELECT r.Name, SUM( a.Rating ) / COUNT( a.Rating ) AS Average_Rating
+$all_average_rating = "SELECT r.Name, r.Note, SUM( a.Rating ) / COUNT( a.Rating ) AS Average_Rating
 FROM attendees a, restaurants r
 WHERE $condition AND r.ID = a.RestaurantID
 GROUP BY r.Name ORDER BY Average_Rating DESC";
@@ -102,13 +102,14 @@ $result = $db->query($all_average_rating);
 if(!$result) { print mysql_error(); }
 
 $data = array();
-while(list($name, $rating) = mysql_fetch_row($result)) {
-  $data[$name] = $rating;
+while(list($name, $note, $rating) = mysql_fetch_row($result)) {
+  $data[$name] = array($rating,$note);
 }
 
 foreach($data as $key=>$value) {
-    $value = round($value,1);
-    print("  <tr><td>$key</td><td>$value</tr>\n");
+    $rating = round($value[0],1);
+    $note = $value[1];
+    print "<tr  title=\"$note\"><td>$key</td><td>$rating</tr>\n";
 }
 
 print("</tbody></table>\n");
@@ -135,7 +136,7 @@ print '<div class="suggestion">';
 	$count = 0;
 	foreach($history as $key=>$value) {
 		$count++;
-		$data[$key] = round($data[$key]/$count,1);
+		$data[$key][0] = round($data[$key][0]/$count,1);
 	}
 	arsort($data);
 
@@ -143,7 +144,7 @@ print '<div class="suggestion">';
 	<table><thead>
 	<tr><td>Restaurant Name</td><td><strong>Score</strong></td></tr></thead><tbody>\n";
 	foreach($data as $key=>$value) {
-		print "  <tr class=\"" . ($q++ % 2 == 0 ? "even" : "odd") . "\"><td>$key</td><td>$value</tr>\n";
+		print "  <tr class=\"" . ($q++ % 2 == 0 ? "even" : "odd") . "\"><td>$key</td><td>$value[0]</tr>\n";
 	}
 	print "</tbody></table>\n";
 
@@ -158,14 +159,14 @@ print '<div class="suggestion">';
 	$count = 0;
 	foreach($history as $key=>$value) {
 		$count++;
-		$data[$key] = round($data[$key]/$count,1);
+		$data[$key][0] = round($data[$key][0]/$count,1);
 	}
 	arsort($data);
 	print "<h2>Suggestions #2<br/>(score = average rating / t^2):</h2>
 	<table><thead>
 	<tr><td>Restaurant Name</td><td>Score</td></tr></thead><tbody>\n" ;
 	foreach($data as $key=>$value) {
-	print "  <tr class=\"" . ($q++ % 2 == 0 ? "even" : "odd") . "\"><td>$key</td><td>$value</tr>\n";
+	print "  <tr class=\"" . ($q++ % 2 == 0 ? "even" : "odd") . "\"><td>$key</td><td>$value[0]</tr>\n";
 	}
 	print("</tbody></table>\n");
 print '</div>';
@@ -181,14 +182,14 @@ print '<div class="suggestion">';
 	if(!$result) { print mysql_error(); }
 
 	$data = array();
-	while(list($name, $rating) = mysql_fetch_row($result)) {
-	$data[$name] = $rating;
+	while(list($name, $note, $rating) = mysql_fetch_row($result)) {
+		$data[$name] = array($rating,$note);
 	}
 
 	$count = 0;
 	foreach($history as $key=>$value) {
-	$count++;
-	$data[$key] = round($data[$key]/($count+5),1);
+		$count++;
+		$data[$key][0] = round($data[$key][0]/($count+5),1);
 	}
 	arsort($data);
 
@@ -197,7 +198,8 @@ print '<div class="suggestion">';
 	<thead><tr><td><strong>Restaurant Name</strong></td><td><strong>Score</strong></td></tr></thead><tbody>\n";
 	
 	foreach($data as $key=>$value) {
-	print("  <tr class=\"" . ($q++ % 2 == 0 ? "even" : "odd") . "\"><td>$key</td><td>$value</tr>\n");
+		$note = $value[1];
+		print("  <tr class=\"" . ($q++ % 2 == 0 ? "even" : "odd") . "\"  title=\"$note\"><td>$key</td><td>$value[0]</tr>\n");
 	}
 	print "</tbody></table>\n";
 print '</div>';

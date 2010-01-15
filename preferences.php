@@ -41,9 +41,9 @@ function doMain() {
 	if($_GET["msg"]) {
 		$result = "<p>" . $_GET["msg"] . "</p>";
 	}
-	$result .= "<p>Please enter a rating for the following restaurants on a scale from 1 to 100</p>";
+	$result .= "<p>Please enter a rating for the following restaurants on a scale from 1 to 100.  100 being the best restaurant ever, 0 being a restaurant you would never visit.</p>";
 	
-	$sql = "SELECT r.ID, r.Name, a.Rating FROM restaurants r LEFT JOIN attendees a ON r.ID = a.RestaurantID AND a.User = '" . $_SESSION["user"] . "' ORDER BY r.Name";
+	$sql = "SELECT r.ID, r.Name, r.Note, a.Rating FROM restaurants r LEFT JOIN attendees a ON r.ID = a.RestaurantID AND a.User = '" . $_SESSION["user"] . "' ORDER BY r.Name";
 	$results = $db->query($sql);
 	
 	if(!$results) {
@@ -51,12 +51,12 @@ function doMain() {
 	}
 	
 	$result .= "<form method=\"post\" class=\"oneColumn\">";
-	while(list($id, $name, $rating) = mysql_fetch_row($results)) {
+	while(list($id, $name, $note, $rating) = mysql_fetch_row($results)) {
 		if(!$rating) {
 			$rating = "50";
 		}
 			
-		$result .= "<div class=\"" . ($q++ % 2 == 0 ? "even" : "odd") . "\"><strong>$name</strong><input type=\"text\" name=\"rating[$id]\" value=\"$rating\"/></div>\n";
+		$result .= "<div class=\"" . ($q++ % 2 == 0 ? "even" : "odd") . "\" title=\"$note\"><strong>$name</strong><input type=\"text\" name=\"rating[$id]\" value=\"$rating\"/></div>\n";
 	}
 	$result .= "<button type=\"submit\" name=\"action\" value=\"save\">Save Preferences</button></form>\n";
 	
